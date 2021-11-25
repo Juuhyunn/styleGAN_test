@@ -8,7 +8,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Function
 
-from op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
+# from op import FusedLeakyReLU, fused_leaky_relu, upfirdn2d
 
 
 class PixelNorm(nn.Module):
@@ -45,10 +45,10 @@ class Upsample(nn.Module):
 
         self.pad = (pad0, pad1)
 
-    def forward(self, input):
-        out = upfirdn2d(input, self.kernel, up=self.factor, down=1, pad=self.pad)
-
-        return out
+    # def forward(self, input):
+    #     out = upfirdn2d(input, self.kernel, up=self.factor, down=1, pad=self.pad)
+    #
+    #     return out
 
 
 class Downsample(nn.Module):
@@ -66,10 +66,10 @@ class Downsample(nn.Module):
 
         self.pad = (pad0, pad1)
 
-    def forward(self, input):
-        out = upfirdn2d(input, self.kernel, up=1, down=self.factor, pad=self.pad)
-
-        return out
+    # def forward(self, input):
+    #     out = upfirdn2d(input, self.kernel, up=1, down=self.factor, pad=self.pad)
+    #
+    #     return out
 
 
 class Blur(nn.Module):
@@ -85,10 +85,10 @@ class Blur(nn.Module):
 
         self.pad = pad
 
-    def forward(self, input):
-        out = upfirdn2d(input, self.kernel, pad=self.pad)
-
-        return out
+    # def forward(self, input):
+    #     out = upfirdn2d(input, self.kernel, pad=self.pad)
+    #
+    #     return out
 
 
 class EqualConv2d(nn.Module):
@@ -148,17 +148,17 @@ class EqualLinear(nn.Module):
         self.scale = (1 / math.sqrt(in_dim)) * lr_mul
         self.lr_mul = lr_mul
 
-    def forward(self, input):
-        if self.activation:
-            out = F.linear(input, self.weight * self.scale)
-            out = fused_leaky_relu(out, self.bias * self.lr_mul)
-
-        else:
-            out = F.linear(
-                input, self.weight * self.scale, bias=self.bias * self.lr_mul
-            )
-
-        return out
+    # def forward(self, input):
+    #     if self.activation:
+    #         out = F.linear(input, self.weight * self.scale)
+    #         out = fused_leaky_relu(out, self.bias * self.lr_mul)
+    #
+    #     else:
+    #         out = F.linear(
+    #             input, self.weight * self.scale, bias=self.bias * self.lr_mul
+    #         )
+    #
+    #     return out
 
     def __repr__(self):
         return (
@@ -330,7 +330,7 @@ class StyledConv(nn.Module):
         self.noise = NoiseInjection()
         # self.bias = nn.Parameter(torch.zeros(1, out_channel, 1, 1))
         # self.activate = ScaledLeakyReLU(0.2)
-        self.activate = FusedLeakyReLU(out_channel)
+        # self.activate = FusedLeakyReLU(out_channel)
 
     def forward(self, input, style, noise=None):
         out = self.conv(input, style)
@@ -599,7 +599,8 @@ class ConvLayer(nn.Sequential):
 
         if activate:
             if bias:
-                layers.append(FusedLeakyReLU(out_channel))
+                pass
+                # layers.append(FusedLeakyReLU(out_channel))
 
             else:
                 layers.append(ScaledLeakyReLU(0.2))

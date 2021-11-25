@@ -12,12 +12,16 @@ class JuuTest:
     def process(self):
         pass
 
+    def test(self):
+        # Tensorflow version: 1.15.0
+        print('Tensorflow version: {}'.format(tf.__version__))
+
     def downloader_pkl(self):
         url = 'https://drive.google.com/open?id=1WNQELgHnaqMTq3TlrnDaVkyrAH8Zrjez'
         #'https://drive.google.com/open?id=1BHeqOZ58WZ-vACR2MJkh1ZVbJK2B-Kle'
         model_id = url.replace('https://drive.google.com/open?id=', '')
 
-        network_pkl = '/content/models/model_%s.pkl' % model_id#(hashlib.md5(model_id.encode()).hexdigest())
+        network_pkl = '/content/models/model_%s.pkl' % model_id #(hashlib.md5(model_id.encode()).hexdigest())
         gdd.download_file_from_google_drive(file_id=model_id,
                                             dest_path=network_pkl)
 
@@ -26,4 +30,5 @@ class JuuTest:
 
 if __name__ == '__main__':
     j = JuuTest()
+    # j.test()
     j.downloader_pkl()

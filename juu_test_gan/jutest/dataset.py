@@ -20,7 +20,12 @@ class MultiResolutionDataset(Dataset):
             raise IOError('Cannot open lmdb img', path)
 
         with self.env.begin(write=False) as txn:
+            # 원래 코드
             self.length = int(txn.get('length'.encode('utf-8')).decode('utf-8'))
+            # print(txn.get(b'__len__'))
+            # self.length = int(str(txn.get(b'__len__')))
+            # length = txn.stat()['entries']
+            # print(length)
 
         self.resolution = resolution
         self.transform = transform

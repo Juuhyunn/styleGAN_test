@@ -335,8 +335,8 @@ class SimpleAdam:
     def variables(self):
         return self.all_state_vars
 
-    def compute_gradients(self, loss, var_list, gate_gradients=tf.train.Optimizer.GATE_NONE):
-        assert gate_gradients == tf.train.Optimizer.GATE_NONE
+    def compute_gradients(self, loss, var_list, gate_gradients=tf.keras.optimizers.Optimizer):
+        assert gate_gradients == tf.keras.optimizers.Optimizer
         return list(zip(tf.gradients(loss, var_list), var_list))
 
     def apply_gradients(self, grads_and_vars):
